@@ -1,0 +1,21 @@
+{
+  "name": "computorv1",
+  "version": "1.0.0",
+  "description": "computorV1 42 project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "rimraf dist && tsc && node dist/index.js",
+    "build": "rimraf dist && tsc",
+    "start": "node dist/index.js"
+  },
+  "author": "rberthie",
+  "license": "ISC",
+  "devDependencies": {
+    "rimraf": "^2.6.3",
+    "typescript": "^3.3.3"
+  },
+  "dependencies": {
+    "@types/node": "^11.9.4"
+  }
+}
