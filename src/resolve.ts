@@ -16,7 +16,7 @@ async function resolveSecondary(reduced: Equation[]): Promise<any> {
 
     const delta: number = b.value ** 2 - ( 4 * a.value * c.value );
 
-    if (isNaN(delta)) throw new Error('Undefined delta');
+    if (isNaN(delta)) throw new Error('invalid equation caused by wrong delta');
 
     if (delta < 0) {
         return { solution : 0, delta, degre: 2 };

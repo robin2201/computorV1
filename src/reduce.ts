@@ -12,8 +12,8 @@ async function checkValues(left: Equation[], right: Equation[]): Promise<any> {
 export async function reduceEquation(splited: Equation[][]): Promise<Equation[]> {
     const re: Equation[] = [];
 
-    const left: Equation[] = await reduceEq(splited[0]);
-    const right: Equation[] = await reduceEq(splited[1]);
+    const left: Equation[] = splited[0].length > 1 ? await reduceEq(splited[0]) : splited[0];
+    const right: Equation[] = splited[1].length > 1 ?  await reduceEq(splited[1]) : splited[1];
 
     if (left.length === 1 && right.length === 1) {
         if (await checkValues(left, right)) return [{ value: 0, power: 0 }];
@@ -34,7 +34,12 @@ export async function reduceEquation(splited: Equation[][]): Promise<Equation[]>
                 power: leftEq.power
             })
 
-        } else re.push(rightEq);
+        } else {
+            re.push({
+                value: rightEq.value * -1,
+                power: rightEq.power
+            })
+        }
 
     }
 
@@ -46,25 +51,26 @@ export async function reduceEquation(splited: Equation[][]): Promise<Equation[]>
 }
 
 
-async function reduceEq(eq: Equation[]): Promise<any> {
+async function reduceEq(eq: Equation[]): Promise<Equation[]> {
     const res: Equation[] = [];
 
     for (const e of eq) {
 
-        const hasSamePower: Equation = eq.find(equ => equ.power === e.power && equ.value !== e.value);
+        if (res && res.length) {
 
-        if (hasSamePower) {
+            let update: boolean = false;
 
-            const newValue: Equation = {
-                value: e.value + hasSamePower.value,
-                power: e.power
-            };
+            for (let final of res) {
+                if (final.power === e.power) {
+                    final.value += e.value;
+                    update = true;
+                }
 
-            if (!res.find(equ => equ.power === newValue.power && equ.value === newValue.value)) res.push(newValue);
+            }
 
-        } else {
-            res.push(e);
-        }
+            if (!update) res.push(e);
+
+        } else res.push(e);
     }
 
     return res;

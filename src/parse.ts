@@ -66,11 +66,7 @@ async function splitEquation(equation: string): Promise<Equation[]> {
 async function splitPartEquation(part: string): Promise<Equation> {
 
     if (!part.includes('*')) {
-        const value: number = +part.replace(' ', '');
-
-        if (isNaN(value)) throw new Error('Invalid value, only digit values are accepted');
-
-        return { value, power: 0 };
+        return naturalParsing(part);
     }
 
     const [ left, right ]: string[] = part.split('*').map(i => i.trim());
@@ -81,9 +77,36 @@ async function splitPartEquation(part: string): Promise<Equation> {
 
     const power: number = +(right.split('^')[1]);
 
-    if (isNaN(power)) throw new Error('Invalid power value, only digit values are accepted');
-    if (power < 0) throw new Error(`Can't solve equation with negative power`);
-    if (power > 2) throw new Error(`Can't solve equation with degree ${power}`);
+    checkPower(power);
 
     return { value, power }
+}
+
+function checkPower(power: number): void {
+    if (isNaN(power)) throw new Error('Invalid power value, only digit values are accepted');
+    else if (power < 0) throw new Error(`Can't solve equation with negative power`);
+    else if (power > 2) throw new Error(`Can't solve equation with degree ${power}`);
+}
+
+async function naturalParsing(part: string): Promise<Equation> {
+    if (part.match(new RegExp('x', 'gi'))) {
+
+        let [ v, p ] = part.replace('X', 'x')
+            .replace(' ', '')
+            .split('x').map(i => +i);
+
+        if (isNaN(v)) throw new Error('Invalid value, only digit values are accepted');
+
+        if (isNaN(p) || !p) p = 1;
+
+        checkPower(p);
+
+        return { value: v, power: p };
+    }
+
+    const value: number = +part.replace(' ', '');
+
+    if (isNaN(value)) throw new Error('Invalid value, only digit values are accepted');
+
+    return { value, power: 0 };
 }
