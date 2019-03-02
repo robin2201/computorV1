@@ -1,7 +1,6 @@
 import { Equation } from "./parse";
 
-async function checkValues(splited: Equation[][]): Promise<any> {
-    const [ left, right ] = splited;
+async function checkValues(left: Equation[], right: Equation[]): Promise<any> {
 
     if (left[0].power === right[0].power) {
         if (left[0].value !== right[0].value) throw new Error('Inéquation');
@@ -13,12 +12,12 @@ async function checkValues(splited: Equation[][]): Promise<any> {
 export async function reduceEquation(splited: Equation[][]): Promise<Equation[]> {
     const re: Equation[] = [];
 
-    if (splited[0].length === 1 && splited[1].length === 1) {
-        if (await checkValues(splited)) return [{ value: 0, power: 0 }];
-    }
-
     const left: Equation[] = await reduceEq(splited[0]);
     const right: Equation[] = await reduceEq(splited[1]);
+
+    if (left.length === 1 && right.length === 1) {
+        if (await checkValues(left, right)) return [{ value: 0, power: 0 }];
+    }
 
     for (const rightEq of right) {
 

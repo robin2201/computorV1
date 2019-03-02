@@ -21,7 +21,7 @@ async function equationArrayAsString(eq: Equation[]): Promise<void> {
     let res = ``;
 
     for (const e of eq) {
-        if (e.value >= 0) res += '+ ';
+        if (e.value >= 0) res += ' + ';
 
         res += `${e.value} * X^${e.power} `;
     }
