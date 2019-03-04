@@ -13,9 +13,9 @@ export interface IParseEquation {
 export async function parseEquation(equation: string): Promise<IParseEquation> {
     const tmpParts: string[] = equation.split('=');
 
-    if (!tmpParts || tmpParts.length !== 2) throw new Error('Invalid expression');
+    if (!tmpParts || tmpParts.length !== 2) throw new Error('Please enter a valid equation');
 
-    if (!tmpParts[0] || !tmpParts[1]) throw new Error('Invalid expression');
+    if (!tmpParts[0] || !tmpParts[1]) throw new Error('Please enter a valid equation');
 
     const parts: string[] = tmpParts.map(i => i.trim());
 

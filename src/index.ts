@@ -4,7 +4,6 @@ import { resolveEquation } from "./resolve";
 import { displaySolution } from "./display";
 import { handleErrors } from "./errors";
 import { Colors, applyColor } from "./display";
-import testEquations from './test';
 
 async function main(equation: string): Promise<void> {
 
@@ -36,15 +35,11 @@ async function main(equation: string): Promise<void> {
 (async () => {
     const argv: string[] = process.argv;
 
-    if (!argv || argv.length !== 3) throw new Error('invalid equation');
+    if (!argv || argv.length !== 3) throw new Error('Please enter an equation as argv');
 
     const polynomial: string = argv[argv.length - 1];
 
-    if (polynomial === 'test') {
-        for (const eq of testEquations) await main(eq.equation);
-    } else await main(polynomial);
-
-    // await main(polynomial);
+    await main(polynomial);
 
     return;
 })().catch(handleErrors);

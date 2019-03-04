@@ -42,7 +42,7 @@ async function resolvePrimary(equation: Equation[]): Promise<any> {
     let a: Equation = equation.find(i => i.power === 1);
     let b: Equation = equation.find(i => i.power === 0);
 
-    if (!a || !b) throw new Error('Invalid expression');
+    if (!a || !b) throw new Error('Please enter a valid equation');
 
     const x1: number = b.value / a.value * -1;
 

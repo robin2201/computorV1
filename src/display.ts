@@ -19,16 +19,19 @@ export async function displaySolution(equation: string, res: any, eq: IParseEqua
 
 async function equationArrayAsString(eq: Equation[]): Promise<void> {
     let res = ``;
-
+    let first: boolean = true;
     for (const e of eq) {
-        if (e.value >= 0) res += '+ ';
+        if (e.value !== 0) {
 
-        res += `${e.value} * X^${e.power} `;
+            if (e.value > 0 && !first) res += '+ ';
+
+            res += `${e.value} * X^${e.power} `;
+        }
+
+        first = false;
     }
 
     res += `= 0`;
-
-    if (res[0] === '+') res = res.substring(2);
 
     console.log(`Reduced: ${applyColor(Colors.BLUE, res.replace('-', '- '))}`);
 }
