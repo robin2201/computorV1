@@ -13,9 +13,9 @@ export interface IParseEquation {
 export async function parseEquation(equation: string): Promise<IParseEquation> {
     const tmpParts: string[] = equation.split('=');
 
-    if (!tmpParts || tmpParts.length !== 2) throw new Error('Please enter a valid equation');
+    if (!tmpParts || tmpParts.length !== 2) throw new Error('Please enter a lol valid equation');
 
-    if (!tmpParts[0] || !tmpParts[1]) throw new Error('Please enter a valid equation');
+    if (!tmpParts[0] || !tmpParts[1]) throw new Error('Please enter an valid equation');
 
     const parts: string[] = tmpParts.map(i => i.trim());
 
@@ -25,7 +25,11 @@ export async function parseEquation(equation: string): Promise<IParseEquation> {
 
     const isSecondary: boolean = !!splited[0].find(i => i.power === 2) || !!splited[1].find(i => i.power === 2);
 
-    return { splited, isReduced: parts[1] === '0', isSecondary };
+    let degre: number = 0;
+
+    splited.map(s =>  s.forEach(i => i.power > degre ? degre = i.power : '' ) );
+
+    return { splited, isReduced: parts[1] === '0', isSecondary,  degre};
 }
 
 async function splitEquation(equation: string): Promise<Equation[]> {
@@ -85,7 +89,9 @@ async function splitPartEquation(part: string): Promise<Equation> {
 function checkPower(power: number): void {
     if (isNaN(power)) throw new Error('Invalid power value, only digit values are accepted');
     else if (power < 0) throw new Error(`Can't solve equation with negative power`);
-    else if (power > 2) throw new Error(`Can't solve equation with degree ${power}`);
+    // else if (power > 2) throw new Error(`Can't solve equation with degree ${power}`);
+    else if (power % 1 !== 0) throw new Error(`Power can 't be a float value`);
+
 }
 
 async function naturalParsing(part: string): Promise<Equation> {

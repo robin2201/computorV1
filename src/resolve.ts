@@ -19,7 +19,10 @@ async function resolveSecondary(reduced: Equation[]): Promise<any> {
     if (isNaN(delta)) throw new Error('invalid equation caused by wrong delta');
 
     if (delta < 0) {
-        return { solution : 0, delta, degre: 2 };
+        const x1: string = `( -${b.value} - i√${delta} ) / 2${a.value}`;
+        const x2: string = `( -${b.value} + i√${delta} ) / 2${a.value} `;
+
+        return { solution : 0, delta, degre: 2, x1, x2 };
 
     } else if (delta > 0) {
 

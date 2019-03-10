@@ -1,7 +1,7 @@
 import { parseEquation, IParseEquation, Equation } from "./parse";
 import { reduceEquation } from "./reduce";
 import { resolveEquation } from "./resolve";
-import { displaySolution } from "./display";
+import {displaySolution, equationArrayAsString} from "./display";
 import { handleErrors } from "./errors";
 import { Colors, applyColor } from "./display";
 
@@ -17,7 +17,7 @@ async function main(equation: string): Promise<void> {
 
     const eq: IParseEquation = await parseEquation(equation);
 
-    const reduced: Equation[] = eq.isReduced ? eq.splited[0] : await reduceEquation(eq.splited);
+    const reduced: Equation[] =  await reduceEquation(eq.splited);
 
     if (reduced.length === 1 && reduced[0].value === 0 && reduced[0].power === 0) {
         console.log('All reals numbers are solutions');
@@ -25,9 +25,16 @@ async function main(equation: string): Promise<void> {
         return;
     }
 
-    const solution: any = await resolveEquation(reduced, eq.isSecondary);
+    if (eq.degre >= 0 && eq.degre <= 2) {
 
-    await displaySolution(equation, solution, eq, reduced);
+        const solution: any = await resolveEquation(reduced, eq.isSecondary);
+        await displaySolution(equation, eq, reduced, solution);
+    } else {
+
+        await displaySolution(equation, eq, reduced);
+        console.log(`${applyColor(Colors.RED, `The polynomial degree is stricly greater than 2, I can't solve.`)}`)
+    }
+
 
     console.log(`${applyColor(Colors.MAGENTA, headerDisplay)}`);
 }
